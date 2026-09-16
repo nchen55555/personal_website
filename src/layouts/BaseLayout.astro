@@ -1,0 +1,26 @@
+---
+// Carlito = a free, metric-compatible clone of Calibri (self-hosted, no external request).
+import '@fontsource/carlito/400.css';
+import '@fontsource/carlito/400-italic.css';
+import '@fontsource/carlito/700.css';
+import '../styles/global.css';
+
+const { frontmatter } = Astro.props;
+const title = frontmatter?.title ?? Astro.props.title ?? 'Nicole Chen';
+const pageTitle = title === 'Nicole Chen' ? title : `${title} — Nicole Chen`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>{pageTitle}</title>
+  </head>
+  <body>
+    <main class="container">
+      <slot />
+    </main>
+  </body>
+</html>

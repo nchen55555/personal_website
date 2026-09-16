@@ -1,0 +1,235 @@
+:root {
+  --text: #222;
+  --muted: #777;
+  --bg: #fff;
+  --link: #1a4fc4;
+  --rule: #eaeaea;
+  --maxw: 42rem; /* ~672px */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  color: var(--text);
+  background: var(--bg);
+  /* Calibri where installed (Windows/Office); Carlito is a free, metric-compatible
+     fallback; then a neutral sans-serif stack everywhere else. */
+  font-family: Calibri, Carlito, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Helvetica, Arial, sans-serif;
+  font-size: 10pt; /* ~13px, i.e. a word-processor "size 10" */
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.container {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 3.5rem 1.25rem 5rem;
+}
+
+/* Links */
+a {
+  color: var(--link);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+/* Typography */
+h1,
+h2,
+h3 {
+  line-height: 1.25;
+  font-weight: 600;
+}
+
+h1 {
+  font-size: 1.5rem;
+  margin: 0 0 1rem;
+}
+
+h2 {
+  font-size: 1.2rem;
+  margin: 2.25rem 0 0.75rem;
+}
+
+p,
+ul,
+ol {
+  margin: 0 0 1.1rem;
+}
+
+ul,
+ol {
+  padding-left: 1.4rem;
+}
+
+li {
+  margin-bottom: 0.35rem;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--rule);
+  margin: 2.5rem 0;
+}
+
+/* Home intro: text on the left, photo on the right */
+.intro {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.75rem;
+  margin-bottom: 1rem;
+}
+
+.intro-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.intro-text > :first-child {
+  margin-top: 0;
+}
+
+/* Right column: profile photo + stacked photos below it */
+.intro-photos {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.profile-photo,
+.stacked-photo {
+  width: 195px;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+}
+
+/* Stack on narrow screens: photo above the text */
+@media (max-width: 560px) {
+  .intro {
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .profile-photo,
+  .stacked-photo {
+    width: 175px;
+  }
+}
+
+/* Images inside content */
+.container img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Writing | Reading toggle (CSS-only, no JavaScript) */
+.feed-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.feed-tabs {
+  margin: 2.25rem 0 0.75rem;
+}
+
+.feed-tabs label {
+  color: var(--muted);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.feed-tabs label:hover {
+  color: var(--text);
+}
+
+.feed-sep {
+  color: var(--rule);
+  margin: 0 0.6rem;
+}
+
+/* The checked radio highlights its tab and reveals its panel. */
+#feed-writing:checked ~ .feed-tabs label[for='feed-writing'],
+#feed-reading:checked ~ .feed-tabs label[for='feed-reading'] {
+  color: var(--text);
+}
+
+.feed-panel {
+  display: none;
+}
+
+#feed-writing:checked ~ .panel-writing,
+#feed-reading:checked ~ .panel-reading {
+  display: block;
+}
+
+/* Reading list: plain bulleted links */
+.reading-list ul {
+  list-style: disc;
+  padding-left: 1.4rem;
+  margin: 0;
+}
+
+.reading-list li {
+  margin-bottom: 0.6rem;
+}
+
+/* Writing index list */
+.post-list {
+  list-style: disc;
+  padding-left: 1.4rem;
+  margin: 0;
+}
+
+.post-list li {
+  margin-bottom: 1.1rem;
+}
+
+.post-list .post-date {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-left: 0.5rem;
+}
+
+.post-excerpt {
+  color: var(--muted);
+  font-size: 8pt; /* same font, word-processor "size 8" */
+  margin-top: 0.15rem;
+}
+
+/* Post header */
+.post-meta {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin: 0 0 2rem;
+}
+
+/* Footer */
+.site-footer {
+  margin-top: 4rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.site-footer a {
+  color: var(--muted);
+}

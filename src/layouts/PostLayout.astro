@@ -1,0 +1,24 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+const { frontmatter } = Astro.props;
+const { title, date } = frontmatter;
+
+const formattedDate = date
+  ? new Date(date).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      timeZone: 'UTC',
+    })
+  : null;
+---
+
+<BaseLayout title={title}>
+  <article>
+    <h1>{title}</h1>
+    {formattedDate && <p class="post-meta">{formattedDate}</p>}
+    <slot />
+  </article>
+
+</BaseLayout>
