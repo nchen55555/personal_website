@@ -1,1 +1,2 @@
 - [How to Do Great Work by Paul Graham](https://paulgraham.com/greatwork.html)
+- [Sentimental Goodbye from Stripe](https://stripe.kudoboard.com/boards/Mc1t7nCL?rid=04f5bb56#view)
