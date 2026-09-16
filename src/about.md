@@ -1,4 +1,4 @@
-My name is Nicole Chen. I live in New York City, New York and work as the 5th person at a startup in the AI services space. Previously, I worked on Experimental Projects, Crypto, and Capital @ [Stripe](https://stripe.com/), Engineering and Product as the 10th person @ [Paraform](https://www.paraform.com/), and Content Understanding at [Snapchat](https://www.snapchat.com/). 
+My name is Nicole Chen. I live in New York City, New York and work as the 5th person at a startup in the AI services space. Previously, I worked on Experimental Projects, Crypto, and Capital @ [Stripe](https://stripe.com/), Engineering and Product as the 10th person @ [Paraform](https://www.paraform.com/), and Content Understanding @ [Snapchat](https://www.snapchat.com/). 
 
 I grew up in Greenwood Village, Colorado, attended college at Harvard where I studied Computer Science and Economics, and currently live with 2 roomates in Flatiron. 
 
