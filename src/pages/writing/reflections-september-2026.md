@@ -23,3 +23,39 @@ I attempt to outline this process of self-reflection for myself. Parts will rema
 - **Knowledgeable.** I want to be in a state where I feel knowledgeable about the industry and interests I've dived into, where I can dissect, defend, and have a durable conversation with other experts.
 - **Generous.** I want to be in a state where I feel that I am treating those around me generously with my time, my patience, my money, my attention, and my kindness. 
 - **Healthy.** I want to be in a state where I feel healthy in my body and my physique and proud of how I present myself to others.
+
+## Knowledge and Experiences
+
+- Do I feel challenged by my peers? Can I identify specifics that I think I can improve on and learn from them?
+- Do I feel confident in my ability to execute? If I don't feel confident, what is missing and can I read up or learn about them so that I do feel confident? What can I embed in my daily routine that would make me more confident so that I am learning and retaining?
+- When I speak, do I feel confident in my statements and with the evidence and knowledge that I know to back my claims? If not, do I need to learn and read more to understand the concepts fully?
+
+### Technology and Product
+
+- Do I feel knowledgeable about how the tech ecosystem is evolving (what new technologies are being shipped, how to interact with them, etc.)?
+- Do I feel knowledgeable about my company's codebase and how everything is set up? Could I spin up the underlying architecture myself one day?
+- Do I understand the space and strategy well of my company enough to be able to pioneer the next product or feature to be built for the company?
+
+### Investing and Financial Literacy
+
+- Do I understand my own investment portfolio and the different vehicles powering them?
+- Do I understand the market well enough to pick and choose which investments to make and confidently execute on them?
+- Do I understand economic and financial markets well-enough from a discussion perspective?
+
+### Conversational Knowledge and Curiosity
+
+- Do I consistently read and acquire new knowledge to contribute to conversations?
+- Do I consistently retain the knowledge I extract (and question) from conversations with others or from articles that I read?
+- Am I exploring new experiences and hobbies in a way that is disciplined and consistent where I can see improvements for myself?
+
+## Health and Wellbeing
+
+- Do I consistently receive 8-9 hours of sleep on a daily basis?
+- Do I stay disciplined to my daily schedule of sleep, working out, stretching, and resting my eyes?
+- Do I feel energized after weaning off caffeine?
+- Do I feel fulfilled with the physical activities (squash, spikeball) that I am participating in?
+
+## Relationships
+
+- Do I treat my coworkers, peers, friends, and acquaintances with attention and intention? Do I make time for friends and family within my schedule?
+- Do I think before I speak and hold myself to a strong degree of confidence and intention before I open my mouth?
