@@ -2,6 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import About from '../about.md';
 import Reading from '../reading.md';
+import NotesLock from '../components/NotesLock.astro';
+import notesBundle from '../data/notes.enc.json';
 
 // Pull in every writing post to show as excerpts below the About text.
 const modules = import.meta.glob('./writing/*.md', { eager: true });
@@ -38,11 +40,14 @@ const fmt = (d) =>
     {/* CSS-only toggle: the checked radio decides which panel shows. */}
     <input type="radio" name="feed" id="feed-writing" class="feed-input" checked />
     <input type="radio" name="feed" id="feed-reading" class="feed-input" />
+    <input type="radio" name="feed" id="feed-notes" class="feed-input" />
 
     <div class="feed-tabs">
       <label for="feed-writing">Writing</label>
       <span class="feed-sep">|</span>
       <label for="feed-reading">Reading</label>
+      <span class="feed-sep">|</span>
+      <label for="feed-notes">Notes</label>
     </div>
 
     <ul class="post-list feed-panel panel-writing">
@@ -57,5 +62,15 @@ const fmt = (d) =>
     <div class="feed-panel panel-reading reading-list">
       <Reading />
     </div>
+
+    {/* Notes are encrypted; the list only appears after the password is entered. */}
+    <div class="feed-panel panel-notes">
+      <NotesLock payload={notesBundle.index} kdf={notesBundle.kdf} mode="index" />
+    </div>
   </section>
 </BaseLayout>
+
+<script>
+  // Lets "← notes" links (/#notes) land on the Notes tab.
+  if (location.hash === '#notes') document.getElementById('feed-notes').checked = true;
+</script>
