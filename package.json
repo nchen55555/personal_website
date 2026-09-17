@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "node --env-file-if-exists=.env scripts/notes.mjs encrypt --force && astro build",
     "preview": "astro preview",
     "astro": "astro",
     "notes:encrypt": "node --env-file-if-exists=.env scripts/notes.mjs encrypt",
