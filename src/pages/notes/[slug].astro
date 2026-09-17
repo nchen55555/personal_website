@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import NotesLock from '../../components/NotesLock.astro';
+import bundle from '../../data/notes.enc.json';
+
+// One page per encrypted note; the body is only readable after unlocking.
+export function getStaticPaths() {
+  return Object.entries(bundle.notes).map(([slug, payload]) => ({
+    params: { slug },
+    props: { payload },
+  }));
+}
+
+const { payload } = Astro.props;
+---
+
+<BaseLayout title="Notes">
+  <NotesLock payload={payload} kdf={bundle.kdf} mode="note" />
+  <p class="notes-back"><a href="/#notes">← notes</a></p>
+</BaseLayout>

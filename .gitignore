@@ -13,3 +13,5 @@ npm-debug.log*
 .DS_Store
 # vercel
 .vercel
+# plaintext notes (published only as src/data/notes.enc.json; see scripts/notes.mjs)
+/src/notes/

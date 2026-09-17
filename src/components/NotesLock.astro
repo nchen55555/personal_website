@@ -1,0 +1,106 @@
+---
+// Password gate for encrypted notes. `payload` is an AES-GCM blob from
+// scripts/notes.mjs; it's decrypted in the browser, so nothing readable ships
+// in the HTML. mode="index" renders the list of notes, mode="note" a full note.
+const { payload, kdf, mode } = Astro.props;
+---
+
+<div
+  class="notes-lock"
+  data-payload={payload}
+  data-salt={kdf.salt}
+  data-iterations={kdf.iterations}
+  data-mode={mode}
+>
+  <form class="notes-form">
+    <input type="password" name="password" placeholder="password" autocomplete="current-password" required />
+    <button type="submit">unlock</button>
+    <span class="notes-error" role="alert"></span>
+  </form>
+  <div class="notes-content"></div>
+</div>
+
+<script>
+  const KEY_STORAGE = 'notes-key';
+
+  const fromB64 = (b64) => Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+  const toB64 = (bytes) => btoa(String.fromCharCode(...bytes));
+
+  async function deriveKey(password, salt, iterations) {
+    const material = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveBits']);
+    const bits = await crypto.subtle.deriveBits({ name: 'PBKDF2', hash: 'SHA-256', salt, iterations }, material, 256);
+    return new Uint8Array(bits);
+  }
+
+  // Throws if the key is wrong (AES-GCM authentication fails).
+  async function decrypt(rawKey, payload) {
+    const data = fromB64(payload);
+    const key = await crypto.subtle.importKey('raw', rawKey, 'AES-GCM', false, ['decrypt']);
+    const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: data.slice(0, 12) }, key, data.slice(12));
+    return JSON.parse(new TextDecoder().decode(plain));
+  }
+
+  const el = (tag, props = {}) => Object.assign(document.createElement(tag), props);
+
+  function renderIndex(target, notes) {
+    const list = el('ul', { className: 'post-list' });
+    for (const note of notes) {
+      const item = el('li');
+      item.append(el('a', { href: `/notes/${note.slug}`, textContent: note.title }));
+      if (note.description) item.append(el('div', { className: 'post-excerpt', textContent: note.description }));
+      list.append(item);
+    }
+    target.replaceChildren(list);
+  }
+
+  function renderNote(target, note) {
+    document.title = `${note.title} — Nicole Chen`;
+    const article = el('article');
+    article.append(el('h1', { textContent: note.title }));
+    if (note.date) {
+      const date = new Date(note.date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        timeZone: 'UTC',
+      });
+      article.append(el('p', { className: 'post-meta', textContent: date }));
+    }
+    // The HTML is our own markdown, rendered at encrypt time.
+    article.append(el('div', { innerHTML: note.html }));
+    target.replaceChildren(article);
+  }
+
+  for (const root of document.querySelectorAll('.notes-lock')) {
+    const { payload, salt, iterations, mode } = root.dataset;
+    const form = root.querySelector('.notes-form');
+    const error = root.querySelector('.notes-error');
+    const content = root.querySelector('.notes-content');
+
+    const open = async (rawKey) => {
+      const data = await decrypt(rawKey, payload);
+      (mode === 'note' ? renderNote : renderIndex)(content, data);
+      form.hidden = true;
+    };
+
+    // Already unlocked earlier in this tab session.
+    const saved = sessionStorage.getItem(KEY_STORAGE);
+    if (saved) open(fromB64(saved)).catch(() => sessionStorage.removeItem(KEY_STORAGE));
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      error.textContent = '';
+      const button = form.querySelector('button');
+      button.disabled = true;
+      try {
+        const rawKey = await deriveKey(form.password.value, fromB64(salt), Number(iterations));
+        await open(rawKey);
+        sessionStorage.setItem(KEY_STORAGE, toB64(rawKey));
+      } catch {
+        error.textContent = 'wrong password';
+      } finally {
+        button.disabled = false;
+      }
+    });
+  }
+</script>

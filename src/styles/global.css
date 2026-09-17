@@ -138,7 +138,7 @@ hr {
   height: auto;
 }
 
-/* Writing | Reading toggle (CSS-only, no JavaScript) */
+/* Writing | Reading | Notes toggle (CSS-only, no JavaScript) */
 .feed-input {
   position: absolute;
   opacity: 0;
@@ -167,7 +167,8 @@ hr {
 
 /* The checked radio highlights its tab and reveals its panel. */
 #feed-writing:checked ~ .feed-tabs label[for='feed-writing'],
-#feed-reading:checked ~ .feed-tabs label[for='feed-reading'] {
+#feed-reading:checked ~ .feed-tabs label[for='feed-reading'],
+#feed-notes:checked ~ .feed-tabs label[for='feed-notes'] {
   color: var(--text);
 }
 
@@ -176,7 +177,8 @@ hr {
 }
 
 #feed-writing:checked ~ .panel-writing,
-#feed-reading:checked ~ .panel-reading {
+#feed-reading:checked ~ .panel-reading,
+#feed-notes:checked ~ .panel-notes {
   display: block;
 }
 
@@ -189,6 +191,50 @@ hr {
 
 .reading-list li {
   margin-bottom: 0.6rem;
+}
+
+/* Notes password gate */
+.notes-form {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.notes-form[hidden] {
+  display: none;
+}
+
+.notes-form input,
+.notes-form button {
+  font: inherit;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+}
+
+.notes-form button {
+  cursor: pointer;
+}
+
+.notes-error {
+  color: var(--muted);
+}
+
+/* Markdown task lists (- [ ] item): the checkbox replaces the bullet */
+.notes-content li:has(> input[type='checkbox']) {
+  list-style: none;
+  margin-left: -1.4rem;
+}
+
+.notes-content li > input[type='checkbox'] {
+  margin: 0 0.4rem 0 0;
+  vertical-align: middle;
+}
+
+.notes-back {
+  margin-top: 2.5rem;
 }
 
 /* Writing index list */
