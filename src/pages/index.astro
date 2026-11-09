@@ -1,76 +1,298 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import About from '../about.md';
-import Reading from '../reading.md';
-import NotesLock from '../components/NotesLock.astro';
-import notesBundle from '../data/notes.enc.json';
-
-// Pull in every writing post to show as excerpts below the About text.
-const modules = import.meta.glob('./writing/*.md', { eager: true });
-
-const posts = Object.values(modules)
-  .map((mod) => ({
-    url: mod.url,
-    ...mod.frontmatter,
-  }))
-  .sort((a, b) => new Date(b.date).valueOf() - new Date(a.date).valueOf());
-
-const fmt = (d) =>
-  new Date(d).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    timeZone: 'UTC',
-  });
+import About from "../about.md";
+import Reading from "../reading.md";
+import NotesLock from "../components/NotesLock.astro";
+import notesBundle from "../data/notes.enc.json";
+import { collections } from "../data/canvas";
+import "../styles/canvas.css";
 ---
 
-<BaseLayout title="Nicole Chen">
-  <div class="intro">
-    <div class="intro-text">
-      <About />
+<!doctype html>
+<html lang="en" class="canvas-theme">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f3f0ea" />
+    <meta
+      name="description"
+      content="An open canvas by Nicole Chen. A collection of ideas, interests, and things along the way."
+    />
+    <title>Nicole Chen — An open canvas</title>
+  </head>
+  <body class="canvas-page">
+    <a class="skip-link" href="#collection-menu">
+      Skip to collections
+    </a>
+    <header class="site-bar">
+      <button
+        class="wordmark"
+        data-view="home"
+        aria-label="Nicole Chen — return to start"
+      >
+        NYC<span class="status-dot"></span>
+      </button>
+    </header>
+    <main
+      id="canvas"
+      tabindex="0"
+      aria-label="Explorable gallery. Drag to move; pinch or use the zoom buttons to zoom. Arrow keys move, plus and minus zoom, Home returns to start."
+    >
+      <div id="world">
+        <section class="hero" aria-labelledby="hero-title">
+          <p class="eyebrow">
+            Nicole Chen · New York · A collection in progress
+          </p>
+          <h1 id="hero-title">
+            <span class="hero-top">UNBOXING</span>
+            <span class="hero-accent">
+              THE
+              <br />
+              COLLECTION
+            </span>
+          </h1>
+          <div class="hero-caption">
+            <div class="hero-about prose">
+              <About />
+            </div>
+            <button data-view="archive">
+              Explore the archive <span>↓</span>
+            </button>
+          </div>
+        </section>
+        <div class="zone-label zone-one">
+          <span>01 / COLLECTIONS</span>
+          <span>Images, objects, and things worth keeping.</span>
+        </div>
+        <div class="zone-label zone-two">
+          <span>02 / EXPLORATIONS</span>
+          <span>A place for things to unfold.</span>
+        </div>
+        {collections.map((group, groupIndex) => (
+          <section
+            class="collection"
+            id={`collection-${group.id}`}
+            style={`--gx:${group.x}px;--gy:${group.y}px;`}
+            data-collection={group.id}
+            data-kind={group.kind}
+            aria-labelledby={`title-${group.id}`}
+          >
+            <button
+              class="stack"
+              aria-label={`Open ${group.title}, ${group.items.length} items`}
+              aria-expanded="false"
+              aria-controls={`spread-${group.id}`}
+            >
+              {[
+                group.items[group.coverIndex ?? 0],
+                ...group.items.filter(
+                  (_, index) => index !== (group.coverIndex ?? 0),
+                ),
+              ]
+                .slice(0, 5)
+                .reverse()
+                .map((item, index) => (
+                  <span
+                    class="stack-card"
+                    style={`--i:${index};--angle:${[-9, 8, -5, 4, 0][index]}deg;--shift:${[-24, 22, -12, 12, 0][index]}px;`}
+                  >
+                    <img
+                      src={item.thumb ?? item.src}
+                      alt=""
+                      draggable="false"
+                      width={item.width}
+                      height={item.height}
+                      decoding="async"
+                    />
+                    <span class="card-title">{item.title}</span>
+                    <span class="card-meta">
+                      {item.kind}
+                      {group.kind !== "photos" && (
+                        <span>
+                          {item.width} × {item.height}
+                        </span>
+                      )}
+                    </span>
+                  </span>
+                ))}
+              <span class="stack-open">Open collection ↗</span>
+            </button>
+            <div class="collection-label">
+              <h2 id={`title-${group.id}`}>{group.title}</h2>
+              <p>
+                {group.category}
+                <span>{String(group.items.length).padStart(2, "0")} items</span>
+              </p>
+            </div>
+            <div class="spread" id={`spread-${group.id}`} hidden>
+              <div class="spread-bar">
+                <div>
+                  <span class="eyebrow">
+                    COLLECTION {String(groupIndex + 1).padStart(2, "0")}
+                  </span>
+                  <h2>{group.title}</h2>
+                </div>
+                <button class="fold-button">
+                  Fold collection <span>×</span>
+                </button>
+              </div>
+              <div class="spread-content">
+                <figure class="selected-work">
+                  <img
+                    src={group.items[0].src}
+                    alt={group.items[0].alt ?? group.items[0].title}
+                    width={group.items[0].width}
+                    height={group.items[0].height}
+                    decoding="async"
+                    loading="lazy"
+                    draggable="false"
+                  />
+                  <figcaption>
+                    <span class="selected-title">{group.items[0].title}</span>
+                    <span class="selected-number">
+                      01 / {String(group.items.length).padStart(2, "0")}
+                    </span>
+                  </figcaption>
+                </figure>
+                <div
+                  class="thumbnail-grid"
+                  aria-label={`${group.title} images`}
+                >
+                  {group.items.map((item, index) => (
+                    <button
+                      class="thumbnail"
+                      data-index={index}
+                      aria-label={`View ${item.alt ?? item.title}`}
+                      aria-pressed={index === 0}
+                      style={`--order:${index}`}
+                    >
+                      <img
+                        src={item.thumb ?? item.src}
+                        alt=""
+                        draggable="false"
+                        width={item.width}
+                        height={item.height}
+                        decoding="async"
+                        loading="lazy"
+                      />
+                      <span>{item.title}</span>
+                      <small>{item.kind}</small>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+        ))}
+      </div>
+    </main>
+    <aside class="canvas-help">
+      <span class="desktop-hint">
+        Drag to explore · ⌘ / Ctrl + scroll to zoom
+      </span>
+      <span class="mobile-hint">Drag to explore · Pinch to zoom</span>
+      <span id="escape-hint" hidden>
+        {" "}
+        · Esc to fold
+      </span>
+    </aside>
+    <div class="navigator" aria-label="Canvas controls">
+      <button
+        id="map-toggle"
+        aria-label="Show canvas overview"
+        aria-expanded="false"
+      >
+        <span class="map-icon" aria-hidden="true">
+          ▧
+        </span>
+      </button>
+      <div class="zoom-controls">
+        <button id="zoom-out" aria-label="Zoom out">
+          −
+        </button>
+        <output id="zoom-value" aria-label="Zoom level">
+          100%
+        </output>
+        <button id="zoom-in" aria-label="Zoom in">
+          +
+        </button>
+      </div>
+      <button
+        data-view="home"
+        class="reset-view"
+        aria-label="Reset canvas view"
+      >
+        ↖
+      </button>
+      <div id="map-panel" hidden>
+        <span class="eyebrow">NAVIGATOR</span>
+        <div class="mini-map" aria-label="Jump to a canvas section">
+          <button
+            class="map-hero"
+            data-view="home"
+            aria-label="Jump to introduction"
+          ></button>
+          {collections.map((group) => (
+            <button
+              class="map-dot"
+              data-jump={group.id}
+              aria-label={`Jump to ${group.title}`}
+              style={`left:${group.x / 19}%;top:${group.y / 31}%;`}
+            ></button>
+          ))}
+          <span id="map-viewport"></span>
+        </div>
+        <button data-view="all" class="overview-button">
+          Fit everything <span>↗</span>
+        </button>
+      </div>
     </div>
-    <div class="intro-photos">
-      <img src="/images/me.png" alt="Nicole Chen" class="profile-photo" />
-      <img src="/images/photo-1.png" alt="Harvard graduation" class="stacked-photo" />
-      <img src="/images/photo-2.png" alt="Squash team" class="stacked-photo" />
+    <div class="collection-menu" id="collection-menu">
+      <button
+        id="index-toggle"
+        aria-expanded="false"
+        aria-controls="index-panel"
+      >
+        Index <span>↗</span>
+      </button>
+      <div id="index-panel" hidden>
+        <span class="eyebrow">THE COLLECTION</span>
+        {collections.map((group, index) => (
+          <button data-open={group.id}>
+            <span>0{index + 1}</span>
+            {group.title}
+            <span>↗</span>
+          </button>
+        ))}
+        <button data-dialog="reading">
+          <span>05</span>Reading<span>↗</span>
+        </button>
+        <button data-dialog="notes">
+          <span>06</span>Private notes<span>↗</span>
+        </button>
+      </div>
     </div>
-  </div>
-
-  <section class="feed">
-    {/* CSS-only toggle: the checked radio decides which panel shows. */}
-    <input type="radio" name="feed" id="feed-writing" class="feed-input" checked />
-    <input type="radio" name="feed" id="feed-reading" class="feed-input" />
-    <input type="radio" name="feed" id="feed-notes" class="feed-input" />
-
-    <div class="feed-tabs">
-      <label for="feed-writing">Writing</label>
-      <span class="feed-sep">|</span>
-      <label for="feed-reading">Reading</label>
-      <span class="feed-sep">|</span>
-      <label for="feed-notes">Notes</label>
-    </div>
-
-    <ul class="post-list feed-panel panel-writing">
-      {posts.map((post) => (
-        <li>
-          <a href={post.url}>{post.title}</a>
-          {post.description && <div class="post-excerpt">{post.description}</div>}
-        </li>
-      ))}
-    </ul>
-
-    <div class="feed-panel panel-reading reading-list">
-      <Reading />
-    </div>
-
-    {/* Notes are encrypted; the list only appears after the password is entered. */}
-    <div class="feed-panel panel-notes">
-      <NotesLock payload={notesBundle.index} kdf={notesBundle.kdf} mode="index" />
-    </div>
-  </section>
-</BaseLayout>
-
-<script>
-  // Lets "← notes" links (/#notes) land on the Notes tab.
-  if (location.hash === '#notes') document.getElementById('feed-notes').checked = true;
-</script>
+    <dialog id="info-dialog" aria-labelledby="dialog-title">
+      <div class="dialog-heading">
+        <h2 id="dialog-title">Reading</h2>
+        <button id="close-dialog" aria-label="Close information">
+          ×
+        </button>
+      </div>
+      <div data-panel="reading" class="prose" hidden>
+        <Reading />
+      </div>
+      <div data-panel="notes" class="prose" hidden>
+        <NotesLock
+          payload={notesBundle.index}
+          kdf={notesBundle.kdf}
+          mode="index"
+        />
+      </div>
+    </dialog>
+    <div class="sr-only" id="canvas-announcement" aria-live="polite"></div>
+    <noscript>
+      <div class="no-script">Enable JavaScript to explore the canvas.</div>
+    </noscript>
+    <script src="../scripts/canvas.ts"></script>
+  </body>
+</html>
